@@ -8,7 +8,7 @@
 MAIN_OBJECT = main.cpp
 
 # All the Object that we used for the engine
-WINDOW_OBJECT = Window.cpp
+GAME_OBJECT = Game.cpp
 
 # Compiler that we used for our game
 COMPILER = g++
@@ -35,5 +35,5 @@ LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 EXE_OBJECT = main
 
 # This is the target that compilers our executable
-all : $(MAIN_OBJS)
-	$(COMPILER) $(STANDARD) $(MAIN_OBJECT) $(WINDOW_OBJECT) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(LINKER_FLAGS) -o $(EXE_OBJECT)
+all : $(MAIN_OBJECT)
+	$(COMPILER) $(STANDARD) $(MAIN_OBJECT) $(GAME_OBJECT) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(LINKER_FLAGS) -o $(EXE_OBJECT)

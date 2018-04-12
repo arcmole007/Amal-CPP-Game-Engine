@@ -1,17 +1,25 @@
 #include <iostream>
 
-#include "Window.h"
+#include <SDL.h>
 
+#include "Game.h"
+
+
+Game *game = nullptr;
 //The main program for the engine
-int main(int argc,const char **argv)
+int main(int argv, char** args)
 {
-    //Here it will called the game
-    Window window("Amal Game Engine", 800, 600);
 
-    while(!window.is_Closed())
-    {
+    game = new Game();
+
+    game->initilize("Amal Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,600, false);
+
+    while(game->run()){
+        game->handleEvents();
+        game->update();
+        game->render();
 
     }
-
+    game->clean();
     return 0;
 }
