@@ -9,6 +9,11 @@ MAIN_OBJECT = main.cpp
 
 # All the Object that we used for the engine
 GAME_OBJECT = Game.cpp
+TEXTURE_MANAGER_OBJECT = TextureManager.cpp
+GAMEOBJECT_OBJECT = GameObject.cpp
+
+# All the objects
+ALL_OBJECTS = $(GAME_OBJECT) $(TEXTURE_MANAGER_OBJECT) $(GAMEOBJECT_OBJECT)
 
 # Compiler that we used for our game
 COMPILER = g++
@@ -36,4 +41,4 @@ EXE_OBJECT = main
 
 # This is the target that compilers our executable
 all : $(MAIN_OBJECT)
-	$(COMPILER) $(STANDARD) $(MAIN_OBJECT) $(GAME_OBJECT) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(LINKER_FLAGS) -o $(EXE_OBJECT)
+	$(COMPILER) $(STANDARD) $(MAIN_OBJECT) $(ALL_OBJECTS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(LINKER_FLAGS) -o $(EXE_OBJECT)

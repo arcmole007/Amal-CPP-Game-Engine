@@ -6,6 +6,7 @@
 
 //all the include that used SDL library
 #include <SDL.h>
+#include <SDL_image.h>
 
 
 //Class game is where the loop for the game 
@@ -42,7 +43,9 @@ class Game{
     //attributes for the class
     private:
 
+        //This is to check the time that upadate
         int count = 0;
+
         //check either game is runnnig
         bool game_is_runnning;
 
@@ -51,7 +54,20 @@ class Game{
         //as it already provide by the SDL library
         SDL_Window *window;
 
+        //This is where we define our renderer
         SDL_Renderer *renderer;
+
+        //Here we declare the texture for the player
+        SDL_Texture* player_texture;
+
+        //Here we try to create a rectangle
+        //and this is the source ???
+        //@note not really sure what the hell is this
+        SDL_Rect source_rectangle;
+
+        //Here we create the rectangle destination
+        //@note a output of the rectangle
+        SDL_Rect destination_rectangle;
 
 };
 

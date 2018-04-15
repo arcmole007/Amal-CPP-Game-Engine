@@ -1,4 +1,11 @@
+//Include our header for game class
 #include "Game.h"
+#include "TextureManager.h"
+#include "GameObject.h"
+
+
+GameObject* player;
+GameObject* enemy;
 
 //Constructor for our game class
 Game::Game()
@@ -53,6 +60,17 @@ void Game::initilize(const char *title, int x_position, int y_position, int widt
         //if the SDL INIT EV == 0
         //game is running correctly
         game_is_runnning = true;
+
+       // SDL_Surface* temporary_surface = IMG_Load("../assets/images/idle-larry.png");
+
+       // player_texture =SDL_CreateTextureFromSurface(renderer, temporary_surface);
+
+        //SDL_FreeSurface(temporary_surface);
+
+       // player_texture = TextureManager::LoadTexture("../assets/images/idle-larry.png", renderer);
+        player = new GameObject("../assets/images/larry1.png", renderer, 0, 0);
+        enemy = new GameObject("../assets/images/enemy.png", renderer, 15, 30);
+
     }
     else
     {
@@ -74,12 +92,25 @@ void Game::handleEvents()
 void Game::update()
 {
     count++;
+    //destination_rectangle.h = 64;
+   // destination_rectangle.w = 256;
+    //destination_rectangle.x = count;
     std::cout << count << std::endl;
+    player->Update();
+    enemy->Update();
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
+
+    //everything must sandwich between SDL_rendereClear and present
+    //SDL_RenderCopy(renderer, player_texture, NULL, &destination_rectangle);
+    player->Render();
+    enemy->Render();
+
+
+
     //this is where we add stuff to render
     SDL_RenderPresent(renderer);
 }
