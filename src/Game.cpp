@@ -2,10 +2,17 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "GameObject.h"
+#include "Map.h"
 
-
+//we can use gameObject class to define all
+//the object like playerr and enemy
 GameObject* player;
 GameObject* enemy;
+Map* map;
+
+
+//we use only this renderer isntead copy alots of pointer
+SDL_Renderer* Game::renderer = nullptr;
 
 //Constructor for our game class
 Game::Game()
@@ -68,8 +75,13 @@ void Game::initilize(const char *title, int x_position, int y_position, int widt
         //SDL_FreeSurface(temporary_surface);
 
        // player_texture = TextureManager::LoadTexture("../assets/images/idle-larry.png", renderer);
-        player = new GameObject("../assets/images/larry1.png", renderer, 0, 0);
-        enemy = new GameObject("../assets/images/enemy.png", renderer, 15, 30);
+
+       //create the objects by passing the filename location,
+       //renderer, and position x and y
+        player = new GameObject("../assets/images/larry1.png", 0, 0);
+        enemy = new GameObject("../assets/images/zombie.png",  50,50);
+        
+        map = new Map();
 
     }
     else
@@ -78,6 +90,8 @@ void Game::initilize(const char *title, int x_position, int y_position, int widt
     }
 }
 
+//Method to hadnle events like keyinput
+//and quit the game
 void Game::handleEvents()
 {
     SDL_Event event;
@@ -89,25 +103,38 @@ void Game::handleEvents()
     }
 }
 
+//Method for all the update the process
 void Game::update()
-{
+{   
+    //calculate the time during update
     count++;
     //destination_rectangle.h = 64;
    // destination_rectangle.w = 256;
     //destination_rectangle.x = count;
-    std::cout << count << std::endl;
+
+    //std::cout << count << std::endl;
+
+    //all the objects process update
     player->Update();
     enemy->Update();
+    
+    
 }
 
+//Method to draw to the screen
 void Game::render()
-{
+{   
+    //clear all the renderer
     SDL_RenderClear(renderer);
-
+    map->Drawmap();
+    
     //everything must sandwich between SDL_rendereClear and present
     //SDL_RenderCopy(renderer, player_texture, NULL, &destination_rectangle);
+
+    //all the objects draw to the screen
     player->Render();
     enemy->Render();
+    
 
 
 
@@ -115,10 +142,16 @@ void Game::render()
     SDL_RenderPresent(renderer);
 }
 
+//Method to clear the memory
+//using use in the deconstructor
 void Game::clean()
-{
+{   
+    //Destroy the window
     SDL_DestroyWindow(window);
+    //destroy the renderer
     SDL_DestroyRenderer(renderer);
+    //quit the game
     SDL_Quit();
+
     std::cout << "Game cleaned!" << std::endl;
 }

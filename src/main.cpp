@@ -32,7 +32,7 @@ int main(int argv, char** args)
     game = new Game();
 
     //we initialize the title,position of the window and the size and the fullscreen 
-    game->initilize("Amal Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,600, false);
+    game->initilize("Amal Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false);
 
     //game loop
     //check if the game is running

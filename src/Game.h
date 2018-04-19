@@ -40,6 +40,8 @@ class Game{
         //check either the game is running
         bool run(){return game_is_runnning;}
 
+        static SDL_Renderer* renderer;
+
     //attributes for the class
     private:
 
@@ -55,7 +57,7 @@ class Game{
         SDL_Window *window;
 
         //This is where we define our renderer
-        SDL_Renderer *renderer;
+        //SDL_Renderer *renderer;
 
         //Here we declare the texture for the player
         SDL_Texture* player_texture;
