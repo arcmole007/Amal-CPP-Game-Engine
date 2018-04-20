@@ -3,12 +3,13 @@
 
 //Common libarary
 #include <iostream>
+#include <vector>
 
 //all the include that used SDL library
 #include <SDL.h>
 #include <SDL_image.h>
 
-
+class ColliderComponent;
 //Class game is where the loop for the game 
 //happen duh
 class Game{
@@ -40,7 +41,13 @@ class Game{
         //check either the game is running
         bool run(){return game_is_runnning;}
 
+        static void AddTile(int id, int x, int y);
+
         static SDL_Renderer* renderer;
+
+        static SDL_Event event;
+
+        static std::vector<ColliderComponent*> colliders;
 
     //attributes for the class
     private:

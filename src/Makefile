@@ -13,8 +13,13 @@ TEXTURE_MANAGER_OBJECT = TextureManager.cpp
 GAMEOBJECT_OBJECT = GameObject.cpp
 MAP_OBJECT = Map.cpp
 
+
 # All the objects
 ALL_OBJECTS = $(GAME_OBJECT) $(TEXTURE_MANAGER_OBJECT) $(GAMEOBJECT_OBJECT) $(MAP_OBJECT)
+
+
+# Complile everything if you lazy
+DEFAULT_ALL_OBJECTS = *.cpp
 
 # Compiler that we used for our game
 COMPILER = g++
@@ -42,4 +47,4 @@ EXE_OBJECT = main
 
 # This is the target that compilers our executable
 all : $(MAIN_OBJECT)
-	$(COMPILER) $(STANDARD) $(MAIN_OBJECT) $(ALL_OBJECTS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(LINKER_FLAGS) -o $(EXE_OBJECT)
+	$(COMPILER) $(STANDARD) $(DEFAULT_ALL_OBJECTS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(LINKER_FLAGS) -o $(EXE_OBJECT)
