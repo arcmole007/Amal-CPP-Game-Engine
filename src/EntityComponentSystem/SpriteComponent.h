@@ -13,6 +13,11 @@ class SpriteComponent : public Component
         SDL_Rect source_rectangle;
         SDL_Rect destination_rectangle;
 
+        bool animated = false;
+        int frames = 0;
+        //delay of frames in miliseconds
+        int speed = 100;
+
     public:
         //Constructor
         SpriteComponent() = default;
@@ -20,6 +25,15 @@ class SpriteComponent : public Component
         //Overloading constructor
         SpriteComponent(const char* path)
         {
+            setTexture(path);
+        }
+
+
+        SpriteComponent(const char* path, int number_frames, int frames_speed)
+        {
+            animated = true;
+            frames = number_frames;
+            speed = frames_speed;
             setTexture(path);
         }
 
@@ -51,6 +65,11 @@ class SpriteComponent : public Component
 
         void update() override
         {
+            if(animated)
+            {
+                source_rectangle.x = source_rectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+            }
+
             destination_rectangle.x = static_cast<int>(transform->position.x);
             destination_rectangle.y = static_cast<int>(transform->position.y);
             destination_rectangle.w = transform->height * transform->scale;

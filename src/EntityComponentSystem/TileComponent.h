@@ -27,9 +27,9 @@ class TileComponent : public Component
 
             switch(tile_ID)
             {
-                case 0 : path = "../assets/images/dirt32.png"; break;
-                case 1 : path = "../assets/images/grass32.png"; break;
-                case 2 : path = "../assets/images/water32.png"; break;
+                case 0 : path = "../assets/images/Tile-x-dark-green.png"; break;
+                case 1 : path = "../assets/images/Tile-x-light-green.png"; break;
+                case 2 : path = "../assets/images/Sea-+.png"; break;
                 default: break;
             }
         }

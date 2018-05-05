@@ -12,18 +12,19 @@
 //all the classes statement
 class Component;
 class Entity;
+class Manager;
 
 //our ID for the component is size_t
 using ComponentID = std::size_t;
-
+using Group = std::size_t;
 //@inline mean we just return back the attributes
 //Check CoponentID
-inline ComponentID getComponentTypeID()
+inline ComponentID getNewComponentTypeID()
 {   
     //basiclly if we called for second time the id become 2
     //because static remember
     //0 -> 0u because ??
-    static ComponentID lastID = 0;
+    static ComponentID lastID = 0u;
     return lastID++;
 }
 
@@ -31,13 +32,18 @@ inline ComponentID getComponentTypeID()
 template <typename T> inline ComponentID getComponentTypeID() noexcept
 {   
     //generate the ID that lastly generate
-    static ComponentID typeID = getComponentTypeID();
+    static_assert (std:: is_base_of<Component, T>::value, "");
+    static ComponentID typeID = getNewComponentTypeID();
     return typeID;
 }
 
 constexpr std::size_t maxComponents = 32;
+//Entity can be in multiple groupy
+constexpr std::size_t maxGroups = 32;
 
 using ComponentBitSet = std::bitset<maxComponents>;
+using GroupBitSet = std::bitset<maxGroups>;
+
 using ComponentArray = std::array<Component*, maxComponents>;
 
 
@@ -59,6 +65,9 @@ class Component
 class Entity
 {
     public:
+
+        //Constructor
+        Entity(Manager& mManager) : manager(mManager){}
         //entity loop all through the components and update the functions
        void update()
        {
@@ -78,11 +87,21 @@ class Entity
        //we make the entity inactive
        void destroy(){active = false;}
 
-        //hasComponet() 
-       template <typename T>bool hasComponent() const
+       bool hasGroup(Group mGroup)
        {
-            return componentBitSet[getComponentTypeID<T>()];
+           return groupBitSet[mGroup];
        }
+
+        void addGroup(Group mGroup);
+        void deleteGroup(Group mGroup)
+        {
+            groupBitSet[mGroup] = false;
+        }
+        //hasComponet() 
+        template <typename T>bool hasComponent() const
+        {
+            return componentBitSet[getComponentTypeID<T>()];
+        }
 
         //addComponent(T Arguments and M Arguments)
         template <typename T, typename... TArgs>T& addComponent(TArgs&&... mArgs)
@@ -109,6 +128,8 @@ class Entity
         
 
     private:
+        //Create manager references
+        Manager& manager;
         //if false we can remove it from the game
         bool active = true;
 
@@ -117,6 +138,7 @@ class Entity
 
         ComponentArray componentArray;
         ComponentBitSet componentBitSet;
+        GroupBitSet groupBitSet;
 };
 
 //manager class
@@ -139,6 +161,17 @@ class Manager
         //refresh all the entities
         void refresh()
         {   
+            for(auto i(0u); i < maxGroups; i++)
+            {
+                auto& v(grouped_entities[i]);
+                v.erase(
+                    std::remove_if(std::begin(v), std::end(v), 
+                        [i](Entity* mEntity)
+                {
+                    return !mEntity->isActive() || !mEntity->hasGroup(i);
+                }),
+                 std::end(v));
+            }
             //remember entites is the vector
             //so this is basiclly a erase() functions remove the
             //entity if the entity is not active
@@ -150,9 +183,19 @@ class Manager
             std::end(entities));
         }
 
+        void AddToGroup(Entity* mEntity, Group mGroup)
+        {
+            grouped_entities[mGroup].emplace_back(mEntity);
+        }
+
+        std::vector<Entity*>& getGroup(Group mGroup)
+        {
+            return grouped_entities[mGroup];
+        }
+
         Entity& addEntity()
         {
-            Entity* e = new Entity();
+            Entity* e = new Entity(*this);
             std::unique_ptr<Entity> uPtr{ e };
             entities.emplace_back(std::move(uPtr));
             return *e;
@@ -161,6 +204,7 @@ class Manager
     private:
         //entities vector collects all the entity
         std::vector<std::unique_ptr<Entity>>entities;
+        std::array<std::vector<Entity*>, maxGroups> grouped_entities;
 
 };
 #endif //ENTITYCOMPONENTSYSTEM_H

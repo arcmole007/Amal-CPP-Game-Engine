@@ -25,8 +25,8 @@ void GameObject::Update()
     y_position++;
 
     //create the source rectangle size and position
-    source_rectangle.h = 64;
-    source_rectangle.w = 64;
+    source_rectangle.h = 32;
+    source_rectangle.w = 32;
     source_rectangle.x = 0;
     source_rectangle.x = 0;
 
