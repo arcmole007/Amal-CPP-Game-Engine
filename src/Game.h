@@ -41,7 +41,7 @@ class Game{
         //check either the game is running
         bool run(){return game_is_runnning;}
 
-        static void AddTile(int id, int x, int y);
+        static void AddTile(int source_x, int source_y, int x_position, int y_position);
 
         static SDL_Renderer* renderer;
 

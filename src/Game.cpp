@@ -28,13 +28,14 @@ std::vector<ColliderComponent*> Game::colliders;
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
 
-// enum group_labels : std::size_t
-// {
-//     group_map,
-//     group_players,
-//     group_enemies,
-//     group_colliders
-// };
+const char* map_file = "../assets/images/terrain_ss.png";
+enum group_labels : std::size_t
+{
+    group_map,
+    group_players,
+    group_enemies,
+    group_colliders
+};
 
 //Constructor for our game class
 Game::Game()
@@ -107,19 +108,20 @@ void Game::initilize(const char *title, int x_position, int y_position, int widt
 
         //EntityComponentSystem implementation:
 
-        Map::LoadMap("../assets/images/Map16x16.txt", 16, 16);
+        Map::LoadMap("../assets/images/map.map", 25, 20);
 
-        player.addComponent<TransformComponent>(1);
-        player.addComponent<SpriteComponent>("../assets/images/Tim-Sheet-idle.png", 4, 100);
+        player.addComponent<TransformComponent>(4);
+        //we call the animated sprite
+        player.addComponent<SpriteComponent>("../assets/images/player_anims.png", true);
         player.addComponent<KeyboardController>();
         player.addComponent<ColliderComponent>("player");
-        //player.addGroup(group_players);
+        player.addGroup(group_players);
 
 
         //let's create wall
-        wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1); 
-        wall.addComponent<SpriteComponent>("../assets/images/Tile-x-dark-green.png");
-        wall.addComponent<ColliderComponent>("wall");
+        // wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1); 
+        // wall.addComponent<SpriteComponent>("../assets/images/Tile-x-dark-green.png");
+        // wall.addComponent<ColliderComponent>("wall");
         //wall.addGroup(group_map);
        
 
@@ -170,9 +172,10 @@ void Game::update()
  
 }
 
-// auto& tiles(manager.getGroup(group_map));
-// auto& players(manager.getGroup(group_players));
-// auto& enemies(manager.getGroup(group_enemies));
+
+auto& tiles(manager.getGroup(group_map));
+auto& players(manager.getGroup(group_players));
+auto& enemies(manager.getGroup(group_enemies));
 
 //Method to draw to the screen
 void Game::render()
@@ -187,23 +190,23 @@ void Game::render()
     //all the objects draw to the screen
     //player->Render();
     //enemy->Render();
-    
+
     //this method draw when they created
-    manager.draw();
-    // for(auto& t : tiles)
-    // {
-    //     t->draw();
-    // }
+    //manager.draw();
+    for(auto& t : tiles)
+    {
+        t->draw();
+    }
 
-    // for(auto& p : players)
-    // {
-    //     p->draw();
-    // }
+    for(auto& p : players)
+    {
+        p->draw();
+    }
 
-    // for(auto& e : enemies)
-    // {
-    //     e->draw();
-    // }
+    for(auto& e : enemies)
+    {
+        e->draw();
+    }
 
     //this is where we add stuff to render
     SDL_RenderPresent(renderer);
@@ -224,9 +227,9 @@ void Game::clean()
 }
 
 //@param id  type of tile
-void Game::AddTile(int id, int x, int y)
+void Game::AddTile(int source_x, int source_y,int x_position, int y_position)
 {
     auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x, y, 32, 32, id);
-    //tile.addGroup(group_map);
+    tile.addComponent<TileComponent>(source_x, source_y, x_position, y_position, map_file);
+    tile.addGroup(group_map);
 }

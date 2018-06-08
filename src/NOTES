@@ -1,0 +1,8 @@
+Notes
+
+1. problem  with enum, size_t and addGroup based on gitHub
+2. TextureManager -> SDL_RendererCopyEX(foo,foo,foo, 0, 0 , flip):
+    actually the 0, 0 is supposed to be NULL but somehow cannot work
+
+Build
+7/6/2018 - Tutorial 18 Animation done
